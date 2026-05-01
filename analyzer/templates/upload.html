@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analyser — Upload</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --linen:    #faf5ee;
+            --cream:    #fff9f3;
+            --walnut:   #7a4f2e;
+            --mahogany: #3e1f0d;
+            --oak:      #c49a6c;
+            --brass:    #b8912a;
+            --brass2:   #d4aa4a;
+            --text:     #2a1a0e;
+            --muted:    #9a8070;
+            --border:   #ddd0bc;
+            --shadow:   rgba(62, 31, 13, 0.12);
+        }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background-color: var(--linen);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                repeating-linear-gradient(168deg, transparent 0px, transparent 28px, rgba(122,79,46,0.025) 28px, rgba(122,79,46,0.025) 29px),
+                repeating-linear-gradient(172deg, transparent 0px, transparent 55px, rgba(196,154,108,0.03) 55px, rgba(196,154,108,0.03) 57px);
+            pointer-events: none; z-index: 0;
+        }
+
+        .bg-glow {
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse 70% 60% at 30% 0%,   rgba(196,154,108,0.18) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 40% at 90% 100%, rgba(184,145,42,0.10)  0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+
+        .page-wrapper {
+            width: 100%; max-width: 500px; padding: 24px;
+            position: relative; z-index: 1;
+            animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-mark {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 32px;
+        }
+        .logo-line {
+            width: 28px; height: 1.5px;
+            background: linear-gradient(90deg, var(--brass), var(--oak));
+        }
+        .logo-text {
+            font-size: 10px; font-weight: 500;
+            letter-spacing: 0.25em; text-transform: uppercase; color: var(--brass);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(34px, 5.5vw, 48px);
+            font-weight: 400; line-height: 1.12;
+            color: var(--mahogany); margin-bottom: 8px;
+        }
+        h1 em { font-style: italic; color: var(--walnut); }
+
+        .subtitle {
+            font-size: 13px; font-weight: 300;
+            color: var(--muted); line-height: 1.75; margin-bottom: 36px;
+        }
+
+        .card {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 6px; padding: 36px 32px; position: relative;
+            box-shadow: 0 2px 0px rgba(255,255,255,0.9) inset,
+                        0 8px 32px var(--shadow),
+                        0 2px 8px rgba(62,31,13,0.06);
+        }
+        .card::before {
+            content: ''; position: absolute; top: -1px; left: -1px;
+            width: 48px; height: 48px;
+            border-top: 2px solid var(--brass); border-left: 2px solid var(--brass);
+            border-top-left-radius: 6px;
+        }
+        .card::after {
+            content: ''; position: absolute; bottom: -1px; right: -1px;
+            width: 48px; height: 48px;
+            border-bottom: 2px solid var(--brass); border-right: 2px solid var(--brass);
+            border-bottom-right-radius: 6px;
+        }
+
+        .field { margin-bottom: 20px; }
+        .field label {
+            display: block; font-size: 10px; font-weight: 500;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--muted); margin-bottom: 7px;
+        }
+        .field input[type="text"],
+        .field input[type="email"] {
+            width: 100%; background: var(--linen);
+            border: 1px solid var(--border); border-radius: 4px;
+            color: var(--text); font-family: 'Jost', sans-serif;
+            font-size: 13px; font-weight: 300; padding: 12px 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .field input:focus {
+            outline: none; border-color: var(--oak);
+            box-shadow: 0 0 0 3px rgba(196,154,108,0.15);
+        }
+        .field input::placeholder { color: #c4b09a; }
+
+        .divider {
+            display: flex; align-items: center; gap: 14px; margin: 24px 0;
+        }
+        .divider::before, .divider::after {
+            content: ''; flex: 1; height: 1px; background: var(--border);
+        }
+        .divider span {
+            font-size: 10px; letter-spacing: 0.18em;
+            text-transform: uppercase; color: var(--muted);
+        }
+
+        .drop-zone {
+            border: 1.5px dashed var(--border); border-radius: 5px;
+            padding: 32px 20px; text-align: center; cursor: pointer;
+            transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+            position: relative; background: var(--linen); margin-bottom: 26px;
+        }
+        .drop-zone:hover {
+            border-color: var(--oak); background: rgba(196,154,108,0.06);
+            box-shadow: 0 4px 20px rgba(122,79,46,0.08);
+        }
+        .drop-zone input[type="file"] {
+            position: absolute; inset: 0; opacity: 0;
+            cursor: pointer; width: 100%; height: 100%;
+        }
+        .drop-icon { display: block; font-size: 28px; margin-bottom: 12px; }
+        .drop-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px; color: var(--walnut); margin-bottom: 4px;
+        }
+        .drop-sub { font-size: 11px; color: var(--muted); font-weight: 300; }
+
+        .btn-submit {
+            width: 100%; padding: 16px 24px;
+            background: linear-gradient(135deg, var(--walnut) 0%, var(--mahogany) 100%);
+            color: #f5ead8; font-family: 'Jost', sans-serif;
+            font-size: 12px; font-weight: 500;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            border: none; border-radius: 4px; cursor: pointer;
+            position: relative; overflow: hidden;
+            transition: transform 0.18s, box-shadow 0.18s;
+            box-shadow: 0 4px 18px rgba(62,31,13,0.25), 0 1px 3px rgba(62,31,13,0.2);
+        }
+        .btn-submit::before {
+            content: ''; position: absolute; top: 0; left: -60%;
+            width: 40%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+            transform: skewX(-20deg); animation: sheen 3.5s infinite 1.5s;
+        }
+        @keyframes sheen {
+            0%   { left: -60%; }
+            100% { left: 160%; }
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(62,31,13,0.3);
+        }
+        .btn-submit:active { transform: translateY(0); }
+
+        .note {
+            margin-top: 18px; font-size: 11px;
+            color: var(--muted); text-align: center; letter-spacing: 0.04em;
+        }
+        .note span { color: var(--brass); }
+
+        .deco-ring {
+            position: fixed; bottom: -120px; right: -120px;
+            width: 400px; height: 400px; border-radius: 50%;
+            border: 40px solid rgba(196,154,108,0.07);
+            pointer-events: none; z-index: 0;
+        }
+        .deco-ring2 {
+            position: fixed; top: -80px; left: -80px;
+            width: 280px; height: 280px; border-radius: 50%;
+            border: 28px solid rgba(184,145,42,0.06);
+            pointer-events: none; z-index: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+    <div class="deco-ring"></div>
+    <div class="deco-ring2"></div>
+
+    <div class="page-wrapper">
+
+        <div class="logo-mark">
+            <div class="logo-line"></div>
+            <span class="logo-text">Resume Atelier</span>
+        </div>
+
+        <h1>Your career,<br><em>beautifully</em> read.</h1>
+        <p class="subtitle">Upload your résumé. We surface your skills<br>and match you to roles that truly fit.</p>
+
+        <div class="card">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="field">
+                    <label for="id_name">Full Name</label>
+                    <input type="text" id="id_name" name="name"
+                           placeholder="e.g. Apurva Dubey"
+                           value="{{ form.name.value|default:'' }}">
+                </div>
+
+                <div class="field">
+                    <label for="id_email">Email Address</label>
+                    <input type="email" id="id_email" name="email"
+                           placeholder="e.g. you@example.com"
+                           value="{{ form.email.value|default:'' }}">
+                </div>
+
+                <div class="divider"><span>Resume File</span></div>
+
+                <div class="drop-zone" id="dropZone">
+                    <input type="file" name="resume_file" id="fileInput"
+                           accept=".pdf,.doc,.docx,.txt">
+                    <span class="drop-icon">🗂️</span>
+                    <p class="drop-title" id="dropTitle">Drop your file here</p>
+                    <p class="drop-sub"   id="dropSub">PDF, DOC, DOCX or TXT · up to 5 MB</p>
+                </div>
+
+                <button type="submit" class="btn-submit">Analyse Résumé →</button>
+            </form>
+        </div>
+
+        <p class="note">Processed privately. <span>Nothing is stored.</span></p>
+    </div>
+
+    <script>
+        const input    = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const title    = document.getElementById('dropTitle');
+        const sub      = document.getElementById('dropSub');
+
+        input.addEventListener('change', () => {
+            const file = input.files[0];
+            if (file) {
+                title.textContent          = file.name;
+                title.style.color          = 'var(--walnut)';
+                sub.textContent            = `${(file.size / 1024).toFixed(1)} KB · Ready to analyse`;
+                dropZone.style.borderColor = 'var(--oak)';
+                dropZone.style.background  = 'rgba(196,154,108,0.07)';
+            }
+        });
+
+        dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.style.borderColor = 'var(--brass)'; });
+        dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = ''; dropZone.style.background = ''; });
+        dropZone.addEventListener('drop',      () => { dropZone.style.borderColor = 'var(--oak)'; });
+    </script>
+</body>
+</html>
